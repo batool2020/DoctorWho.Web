@@ -67,17 +67,7 @@ namespace DoctorWho.Web.Controllers
 
             // map the entity back to the dto
             var createdDoctorToReturn = _mapper.Map<Models.DoctorDto>(newDoctor);
-            
-            //DoctorValidator validator = new DoctorValidator();
-            //ValidationResult result = validator.Validate(createdDoctorToReturn);
-            //if (!result.IsValid)
-            //{
-            //    foreach (var failure in result.Errors)
-            //    {
-            //        Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
-
-            //    }
-            //}
+          
 
 
             return CreatedAtRoute("GetDoctors",

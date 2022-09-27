@@ -1,6 +1,7 @@
 using DoctorWho.Db;
 using DoctorWho.Web.Services;
 using DoctorWho.Web.Validators;
+using episodeWho.Web.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;

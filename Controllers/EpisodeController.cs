@@ -30,6 +30,43 @@ namespace DoctorWho.Web.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<ActionResult<EpisodeDto>> CreateEpisode(
+           EpisodeDto episode)
+        {
+            
+            var newEpisode = _mapper.Map<tblEpisode>(episode);
+            await _manager.Manage(newEpisode);
+            //adding the episode 
+            await _episodeInfoRepository.InsertEpisdoeAsync(newEpisode);
+            await _episodeInfoRepository.SaveChangesAsync();
+
+            // map the entity back to the dto
+            var createdEpisodeToReturn = _mapper.Map<Models.EpisodeDto>(newEpisode);
+
+
+
+            return CreatedAtRoute("",
+
+                new
+                {
+                    EpisodeId = createdEpisodeToReturn.tblEpisodeId,
+                    EpisodeSeriesNumber = createdEpisodeToReturn.SeriesNumber,
+                    EpisodeNumber = createdEpisodeToReturn.EpisodeNumber,
+                    EpisodeType = createdEpisodeToReturn.EpisodeType,
+                    EpisodeTitle = createdEpisodeToReturn.Title,
+                    EpisodeDate = createdEpisodeToReturn.EpisodeDate,
+                    EpisodeDoctorId = createdEpisodeToReturn.DoctorId,
+                    EpisodeAuthorId = createdEpisodeToReturn.AuthorId,
+                    EpisodeNotes = createdEpisodeToReturn.Notes
+                    //CompanionsName = createdEpisodeToReturn.Companions,
+                    //Enemies = createdEpisodeToReturn.Enemies,
+
+                });
+            
+
+        }
+
 
     }
 }
