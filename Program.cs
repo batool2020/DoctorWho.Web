@@ -15,6 +15,7 @@ builder.Services.AddControllers().AddFluentValidation(c => c.RegisterValidatorsF
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddValidatorsFromAssemblyContaining<DoctorValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<EpisodeValidator>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,6 +27,10 @@ builder.Services.AddDbContext<DoctorWhoCoreDbContext>(
 //dependancy injection
 builder.Services.AddScoped<IDoctorInfoRepository, DoctorInfoRepository>();
 builder.Services.AddScoped<IDoctorManager, DoctorManager>();
+
+builder.Services.AddScoped<IEpisodeInfoRepository, EpisodeInfoRepository>();
+builder.Services.AddScoped<IEpisodeManager, EpisodeManager>();
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

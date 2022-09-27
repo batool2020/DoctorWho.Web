@@ -35,7 +35,6 @@ namespace DoctorWho.Web.Services
         public async Task<tblDoctor> GetDoctorByIdAsync(int doctorId)
         {
             return await _context.Doctors.FindAsync(doctorId);
-
         }
 
        public void DeleteDoctor(tblDoctor doctor)
