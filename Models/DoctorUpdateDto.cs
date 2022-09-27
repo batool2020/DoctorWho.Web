@@ -2,9 +2,8 @@
 
 namespace DoctorWho.Web.Models
 {
-    public class DoctorDto
+    public class DoctorUpdateDto
     {
-        public int tblDoctorId { get; set; }
        // [Required]
         public int DoctorNumber { get; set; }
        // [Required]

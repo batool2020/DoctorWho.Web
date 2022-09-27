@@ -10,6 +10,8 @@ namespace DoctorWho.Web.Profiles
             // create a map from the doctor entity to the doctor dto
 
             CreateMap<tblDoctor, Models.DoctorDto>();
+            CreateMap<Models.DoctorDto, tblDoctor>();
+            CreateMap<Models.DoctorUpdateDto, tblDoctor>();
 
 
         }
