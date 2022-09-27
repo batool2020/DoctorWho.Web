@@ -12,6 +12,8 @@ namespace DoctorWho.Web.Services
         Task<bool> SaveChangesAsync();
         Task<tblDoctor> GetDoctorByIdAsync(int doctorId);
 
+        void DeleteDoctor(tblDoctor doctor);   
+
 
     }
 }

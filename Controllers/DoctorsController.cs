@@ -136,5 +136,20 @@ namespace DoctorWho.Web.Controllers
 
                
         }
+
+        [HttpDelete ("{doctorId}")]
+        public async Task<ActionResult> DeleteDoctor(int doctorId)
+        {
+            var doctor = await _doctorInfoRepository.GetDoctorByIdAsync(doctorId); 
+            if(doctor == null)
+            {
+               return  NotFound();
+            }
+
+            _doctorInfoRepository.DeleteDoctor(doctor);
+
+            return Content($" The Doctor with ID : {doctor.tblDoctorId} and Name {doctor.DoctorName} was deleted "); 
+
+        }
     }
 }
