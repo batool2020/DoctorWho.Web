@@ -19,5 +19,24 @@ namespace DoctorWho.Web.Services
             return await _context.Doctors.ToListAsync();
 
         }
+
+        public async Task InsertDoctorAsync(tblDoctor doctor)
+        {
+            // we need to call save changes to save data to database
+            await _context.Doctors.AddAsync(doctor);
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync() >= 0);    
+        }
+
+
+        public async Task<tblDoctor> GetDoctorByIdAsync(int doctorId)
+        {
+            return await _context.Doctors.FindAsync(doctorId);
+
+        }
+
     }
 }
