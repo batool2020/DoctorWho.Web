@@ -38,5 +38,11 @@ namespace DoctorWho.Web.Services
 
         }
 
+       public void DeleteDoctor(tblDoctor doctor)
+        {
+            _context.Remove(doctor);
+        }
+
+
     }
 }
