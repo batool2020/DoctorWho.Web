@@ -12,6 +12,12 @@ namespace DoctorWho.Web.Profiles
             CreateMap<tblDoctor, Models.DoctorDto>();
             CreateMap<Models.DoctorDto, tblDoctor>();
             CreateMap<Models.DoctorUpdateDto, tblDoctor>();
+            CreateMap<tblDoctor, Models.DoctorUpsertDto>();
+            CreateMap<Models.DoctorUpsertDto, tblDoctor>();
+
+            CreateMap<tblDoctor, Models.DoctorUpsertUpdateDto>();
+            CreateMap<Models.DoctorUpsertUpdateDto, tblDoctor>();
+
 
 
         }
