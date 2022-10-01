@@ -5,10 +5,12 @@ using episodeWho.Web.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 
@@ -17,12 +19,15 @@ builder.Services.AddControllers().AddFluentValidation(c => c.RegisterValidatorsF
 
 builder.Services.AddValidatorsFromAssemblyContaining<DoctorValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<EpisodeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<EpisodeValidator>();
+
+
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DoctorWhoCoreDbContext>(
-    //DbContextOptions => DbContextOptions.UseSqlServer("Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = DoctorWhoCore")
+  //  DbContextOptions => DbContextOptions.UseSqlServer(_configuration.GetConnectionString("CityInfoDBConnectionString"))
     ); // adding the content
 
 //dependancy injection
@@ -32,6 +37,9 @@ builder.Services.AddScoped<IDoctorManager, DoctorManager>();
 builder.Services.AddScoped<IEpisodeInfoRepository, EpisodeInfoRepository>();
 builder.Services.AddScoped<IEpisodeManager, EpisodeManager>();
 
+
+builder.Services.AddScoped<IAuthorRepository, AuthorInfoRepository>();
+builder.Services.AddScoped<IAuthorManager, AuthorManager>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

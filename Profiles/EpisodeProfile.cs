@@ -11,8 +11,6 @@ namespace DoctorWho.Web.Profiles
 
             CreateMap<tblEpisode, Models.EpisodeDto>();
             CreateMap<Models.EpisodeDto, tblEpisode>();
-            CreateMap<Models.EpisodeDto, tblEpisode>();
-
 
         }
     }

@@ -12,8 +12,6 @@ namespace DoctorWho.Web.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
 
         }
-
-
         public async Task<IEnumerable<tblDoctor>> GetDoctorsAsync()
         {
             return await _context.Doctors.ToListAsync();
@@ -30,7 +28,6 @@ namespace DoctorWho.Web.Services
         {
             return (await _context.SaveChangesAsync() >= 0);    
         }
-
 
         public async Task<tblDoctor> GetDoctorByIdAsync(int doctorId)
         {

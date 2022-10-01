@@ -55,10 +55,7 @@ namespace DoctorWho.Web.Controllers
         public async Task<ActionResult<DoctorDto>> CreateDoctor(
             DoctorDto doctor)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest();
-            //}
+   
             var newDoctor = _mapper.Map<tblDoctor>(doctor);
             await _manager.Manage(newDoctor);
             //adding the doctor 
@@ -70,7 +67,7 @@ namespace DoctorWho.Web.Controllers
           
 
 
-            return CreatedAtRoute("GetDoctors",
+            return CreatedAtRoute("",
 
                 new
                 {
@@ -85,31 +82,75 @@ namespace DoctorWho.Web.Controllers
             
         }
 
-        [HttpPut("{doctorid}")]
-        public async Task<ActionResult> UpdateDoctor(int doctorid, DoctorUpdateDto doctordto)
+
+        //Upsert API
+        [HttpPut("{doctorid}/upsert")]
+        public async Task<ActionResult> UpsertDoctor(int doctorid, DoctorUpsertUpdateDto doctordto)
         {
             //find the doctor
             var doctorfromdata = await _doctorInfoRepository.GetDoctorByIdAsync(doctorid);
-            if(doctorfromdata == null)
+            if (doctorfromdata == null)
+            {
+                var newDoctor = _mapper.Map<tblDoctor>(doctordto);
+                await _manager.Manage(newDoctor);
+                //adding the doctor 
+                await _doctorInfoRepository.InsertDoctorAsync(newDoctor);
+                await _doctorInfoRepository.SaveChangesAsync();
+
+                // map the entity back to the dto
+                var createdDoctorToReturn = _mapper.Map<Models.DoctorUpsertUpdateDto>(newDoctor);
+                return CreatedAtRoute("",
+
+                    new
+                    {
+                        tblDoctorId = newDoctor.tblDoctorId,
+                        DoctorName = createdDoctorToReturn.DoctorName,
+                        DoctorNumber = createdDoctorToReturn.DoctorNumber,
+                        DoctorBirthDate = createdDoctorToReturn.BirthDate,
+                        FirstEpisodeDate = createdDoctorToReturn.FirstEpisodeDate,
+                        LastEpisodeDate = createdDoctorToReturn.LastEpisodeDate
+
+                    });
+            }
+            else
+            {
+
+                var updatedDoctorToReturn = _mapper.Map(doctordto, doctorfromdata);
+                await _manager.Manage(updatedDoctorToReturn);
+
+                await _doctorInfoRepository.SaveChangesAsync();
+
+                return CreatedAtRoute("",
+
+                   new
+                   {
+                       // tblDoctorId = updatedDoctorToReturn.tblDoctorId,
+                       DoctorName = updatedDoctorToReturn.DoctorName,
+                       DoctorNumber = updatedDoctorToReturn.DoctorNumber,
+                       DoctorBirthDate = updatedDoctorToReturn.BirthDate,
+                       FirstEpisodeDate = updatedDoctorToReturn.FirstEpisodeDate,
+                       LastEpisodeDate = updatedDoctorToReturn.LastEpisodeDate
+
+                   });
+            }
+
+               
+        }
+
+        //Update API
+        [HttpPut("{doctorid}/update")]
+        public async Task<ActionResult> UpdateDoctor(int doctorid, DoctorUpsertUpdateDto doctordto)
+        {
+            //find the doctor
+            var doctorfromdata = await _doctorInfoRepository.GetDoctorByIdAsync(doctorid);
+            if (doctorfromdata == null)
             {
                 return NotFound();
             }
-
-            var updatedDoctorToReturn = _mapper.Map(doctordto, doctorfromdata);
+                var updatedDoctorToReturn = _mapper.Map(doctordto, doctorfromdata);
             await _manager.Manage(updatedDoctorToReturn);
 
             await _doctorInfoRepository.SaveChangesAsync();
-
-            //DoctorValidator validator = new DoctorValidator();
-            //ValidationResult result = validator.Validate(updatedDoctorToReturn);
-            //if (!result.IsValid)
-            //{
-            //    foreach (var failure in result.Errors)
-            //    {
-            //        Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
-
-            //    }
-            //}
 
             return CreatedAtRoute("",
 
@@ -123,11 +164,10 @@ namespace DoctorWho.Web.Controllers
                    LastEpisodeDate = updatedDoctorToReturn.LastEpisodeDate
 
                });
-
-               
         }
 
-        [HttpDelete ("{doctorId}")]
+
+            [HttpDelete ("{doctorId}")]
         public async Task<ActionResult> DeleteDoctor(int doctorId)
         {
             var doctor = await _doctorInfoRepository.GetDoctorByIdAsync(doctorId); 
