@@ -13,9 +13,10 @@ namespace DoctorWho.Web.Models
         public int AuthorId { get; set; }
         public int DoctorId { get; set; }
         public string Notes { get; set; }
+        public ICollection<CompanionDto> Companions { get; set; } = new List<CompanionDto>();
 
-        public List<tblEnemy> Enemies { get; set; }
-        public List<tblCompanion> Companions { get; set; }
+        public ICollection<EnemyDto> Enemies { get; set; } = new List<EnemyDto>();  
+        // create new DTO 
         
 
     }

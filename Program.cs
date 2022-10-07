@@ -8,18 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddControllers().AddFluentValidation(c => c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly())).AddJsonOptions(
+    options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddValidatorsFromAssemblyContaining<DoctorValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<EpisodeValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<EpisodeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AuthorValidator>();
 
 
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
@@ -27,8 +32,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DoctorWhoCoreDbContext>(
-  //  DbContextOptions => DbContextOptions.UseSqlServer(_configuration.GetConnectionString("CityInfoDBConnectionString"))
-    ); // adding the content
+   options => {
+       options.UseSqlServer(
+       builder.Configuration["ConnectionStrings:CityInfoDBConnectionString"]); 
+       }); // adding the content
 
 //dependancy injection
 builder.Services.AddScoped<IDoctorInfoRepository, DoctorInfoRepository>();

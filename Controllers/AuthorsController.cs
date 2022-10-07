@@ -42,7 +42,7 @@ namespace DoctorWho.Web.Controllers
         [HttpPut("{authorId}/update")]
         public async Task<ActionResult> UpdateAuthor(int authorId, AuthorUpdateDto authordto)
         {
-            //find the doctor
+            //find the author
             var authorentity = await _authorInfoRepository.GetAuthorByIdAsync(authorId);
             if (authorentity == null)
             {

@@ -12,6 +12,13 @@ namespace DoctorWho.Web.Profiles
             CreateMap<tblEpisode, Models.EpisodeDto>();
             CreateMap<Models.EpisodeDto, tblEpisode>();
 
+            CreateMap<tblEnemy, Models.EnemyDto>();
+            CreateMap<Models.EnemyDto, tblEnemy>();
+
+
+            CreateMap<tblCompanion, Models.CompanionDto>();
+            CreateMap<Models.CompanionDto, tblCompanion>();
+
         }
     }
 }
