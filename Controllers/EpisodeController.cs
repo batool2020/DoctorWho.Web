@@ -59,13 +59,99 @@ namespace DoctorWho.Web.Controllers
                     EpisodeDoctorId = createdEpisodeToReturn.DoctorId,
                     EpisodeAuthorId = createdEpisodeToReturn.AuthorId,
                     EpisodeNotes = createdEpisodeToReturn.Notes
-                    //CompanionsName = createdEpisodeToReturn.Companions,
-                    //Enemies = createdEpisodeToReturn.Enemies,
 
                 });
             
 
         }
+
+
+        [HttpPut("{episodeid}/Companion")]
+        public async Task<ActionResult<EpisodeDto>> AddCompaniontoEpisode(
+          CompanionDto companion,  int episodeid)
+        {
+            // find the episode
+            var EpisodeById = await _episodeInfoRepository.GetEpisodesByIdAsync(episodeid);
+            if (EpisodeById == null)
+            {
+                return NotFound();
+            }
+
+            // map the companiondto to the table
+            var newCompanion = _mapper.Map<tblCompanion>(companion);
+
+
+            await _episodeInfoRepository.InsertCompaniontoEpisode(newCompanion, EpisodeById.tblEpisodeId);
+
+            //map the episode back to the dto
+            var updatedEpisode = _mapper.Map<Models.EpisodeDto>(await _episodeInfoRepository.GetEpisodesByIdAsync(episodeid)); // read the episode from database
+
+
+            return CreatedAtRoute("",
+
+                new
+                {
+                    EpisodeSeriesNumber = updatedEpisode.SeriesNumber,
+                    EpisodeNumber = updatedEpisode.EpisodeNumber,
+                    EpisodeType = updatedEpisode.EpisodeType,
+                    EpisodeTitle = updatedEpisode.Title,
+                    EpisodeDate = updatedEpisode.EpisodeDate,
+                    EpisodeDoctorId = updatedEpisode.DoctorId,
+                    EpisodeAuthorId = updatedEpisode.AuthorId,
+                    EpisodeNotes = updatedEpisode.Notes,
+                    EpisodeCompanion = updatedEpisode.Companions
+                    
+
+                });
+
+
+        }
+
+
+        [HttpPut("{episodeid}/Enemy")]
+        public async Task<ActionResult<EpisodeDto>> AddEnemytoEpisode(
+          EnemyDto enemy, int episodeid)
+        {
+            // find the episode
+            var EpisodeById = await _episodeInfoRepository.GetEpisodesByIdAsync(episodeid);
+            if (EpisodeById == null)
+            {
+                return NotFound();
+            }
+
+            // map the companiondto to the table
+            var newEnemy = _mapper.Map<tblEnemy>(enemy);
+
+
+            await _episodeInfoRepository.InsertEnemyToEpisode(newEnemy, EpisodeById.tblEpisodeId);
+
+            //map the episode back to the dto
+            var updatedEpisode = _mapper.Map<Models.EpisodeDto>(await _episodeInfoRepository.GetEpisodesByIdAsync(episodeid)); // read the episode from database
+
+
+            return CreatedAtRoute("",
+
+                new
+                {
+                    EpisodeSeriesNumber = updatedEpisode.SeriesNumber,
+                    EpisodeNumber = updatedEpisode.EpisodeNumber,
+                    EpisodeType = updatedEpisode.EpisodeType,
+                    EpisodeTitle = updatedEpisode.Title,
+                    EpisodeDate = updatedEpisode.EpisodeDate,
+                    EpisodeDoctorId = updatedEpisode.DoctorId,
+                    EpisodeAuthorId = updatedEpisode.AuthorId,
+                    EpisodeNotes = updatedEpisode.Notes,
+                    EpisodeCompanion = updatedEpisode.Companions,
+                    EpisodeEnemy = updatedEpisode.Enemies
+
+
+                });
+
+
+        }
+
+
+
 
 
     }
